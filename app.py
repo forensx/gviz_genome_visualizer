@@ -22,16 +22,21 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 class Upload(Resource):
     def post(self):
         target = os.path.join(UPLOAD_FOLDER, 'test_docs')
+
         if not os.path.isdir(target):
             os.mkdir(target)
+
         logger.info("welcome to upload`")
+        
         file = request.files['file']
         filename = secure_filename(file.filename)
         destination = "\\".join([target, filename]) # unicode formatted escape character
         file.save(destination)
         session['uploadFilePath'] = destination
+
         print(session['uploadFilePath'])
         response = "Whatever you wish too return"
+        
         return {"response": response, "file_url": session['uploadFilePath']}
 
 
