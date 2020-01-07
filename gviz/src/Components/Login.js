@@ -1,10 +1,8 @@
 import React from 'react';
-import { useDropzone } from 'react-dropzone';
-import FileDropper from './FileDropper';
 import FileDropperVanilla from './FileDropperVanilla'
 import "./Styles/Home.css";
 
-export default function Home() {
+export default function Login() {
     return (
         <div className="container">
             <div className="parent">
