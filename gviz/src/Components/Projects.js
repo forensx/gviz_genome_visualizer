@@ -32,7 +32,7 @@ export default class Projects extends React.Component {
         }}>
             <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                <SubMenu
+            <SubMenu
                     key="sub1"
                     title={
                         <span>Project 1</span>
