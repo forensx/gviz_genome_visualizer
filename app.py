@@ -83,9 +83,14 @@ class Login(Resource):
         
         return result 
         
+@api.route('/projects/<string: user_id>')
+class Projects(Resource):
+    def get(self, user_id):
+        # return all projects for this userID from Mongo (mongo.find_all())
+        # also need to be able to POST (HTTPS method) projects in (to create new projects) and edit projects with PUT method
+        # and DELETE projects with DELETE method
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
 @api.route('/upload')
 class Upload(Resource):
     def post(self):
@@ -108,21 +113,6 @@ class Upload(Resource):
         return {"response": response, "file_url": session['uploadFilePath']}
 
 
-@api.route('/overlaps')
-class Overlaps(Resource):
-    def post(self):
-        #file_url = request.form['file_url'] # get form from React API call to overlaps
-        # return overlaps data with BEDtools (external file)
-        return {"response": "Under construction!"}
-
-
-@api.route('/manhattan')
-class Overlaps(Resource):
-    def post(self):
-        #file_url = request.form['file_url'] # get form from React API call to overlaps
-        return {"response": "Under construction!"}
-
-
 if __name__ == '__main__':
     app.secret_key = os.urandom(24)
-    app.run(debug=True)
+    app.run(debug=True)    
