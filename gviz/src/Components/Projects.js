@@ -1,21 +1,29 @@
 import React from "react";
-import { Layout, Menu, Icon, Button, Dropdown, Breadcrumb } from "antd";
+import { Layout, Menu, Icon, Button, Dropdown, Breadcrumb, Modal } from "antd";
 import { PageHeader, Descriptions } from "antd";
+import {
+  Form,
+  Input,
+  Tooltip,
+  Cascader,
+  Select,
+  Row,
+  Col,
+  Checkbox,
+  AutoComplete
+} from "antd";
+import ExperimentCreatorModal from "./ExperimentCreatorModal";
 import "antd/dist/antd.css";
 
 const { Header, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 
-const menu = (
-  <Menu>
-    <Menu.Item key="1">Experiment</Menu.Item>
-    <Menu.Item key="2">Project</Menu.Item>
-  </Menu>
-);
-
 export default class Projects extends React.Component {
   state = {
-    collapsed: false
+    collapsed: false,
+    ModalText: "Content of the modal",
+    visible: false,
+    confirmLoading: false
   };
 
   toggle = () => {
@@ -24,7 +32,34 @@ export default class Projects extends React.Component {
     });
   };
 
+  showModal = () => {
+    this.setState({
+      visible: true
+    });
+  };
+
+  handleOk = () => {
+    this.setState({
+      ModalText: "The modal will be closed after two seconds",
+      confirmLoading: true
+    });
+    setTimeout(() => {
+      this.setState({
+        visible: false,
+        confirmLoading: false
+      });
+    }, 2000);
+  };
+
+  handleCancel = () => {
+    console.log("Clicked cancel button");
+    this.setState({
+      visible: false
+    });
+  };
+
   render() {
+    const { visible, confirmLoading, ModalText } = this.state;
     return (
       <Layout
         style={{
@@ -41,7 +76,17 @@ export default class Projects extends React.Component {
             flexDirection: "row"
           }}
         >
-          <Dropdown overlay={menu} style={{ marginLeft: "auto" }}>
+          <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item key="1" onClick={this.showModal}>
+                  Experiment
+                </Menu.Item>
+                <Menu.Item key="2">Project</Menu.Item>
+              </Menu>
+            }
+            style={{ marginLeft: "auto" }}
+          >
             <Button style={{ marginLeft: "auto" }}>
               New <Icon type="down" style={{}} />
             </Button>
@@ -53,6 +98,17 @@ export default class Projects extends React.Component {
             flex: "auto"
           }}
         >
+          <div className="experimentCreateModal">
+            <Modal
+              title="Project Creation Wizard"
+              visible={visible}
+              onOk={this.handleOk}
+              confirmLoading={confirmLoading}
+              onCancel={this.handleCancel}
+            >
+              Project Creation modal. Enter project details here.
+            </Modal>
+          </div>
           <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
               <SubMenu key="sub1" title={<span>6CI Monoclonal Antibody</span>}>

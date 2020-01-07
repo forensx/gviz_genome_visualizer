@@ -1,7 +1,7 @@
 from flask import Flask, flash, request, redirect, url_for, session, jsonify, json
 from flask_restplus import Resource, Api
 from flask_pymongo import PyMongo 
-from bson.objectid import ObjectId 
+from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt 
 from flask_jwt_extended import JWTManager 
 from flask_jwt_extended import create_access_token
