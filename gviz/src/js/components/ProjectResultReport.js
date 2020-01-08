@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { PageHeader, Descriptions, Layout } from "antd";
 
-const { Header, Sider, Content } = Layout;
+const { Content } = Layout;
 
 const mapStateToProps = state => {
   return { experiments: state.experiments };

@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Menu, Icon, Button, Dropdown, Breadcrumb, Modal } from "antd";
-import { PageHeader, Descriptions } from "antd";
+import { Layout, Menu } from "antd";
 import { toggleSidebar } from "../actions/index";
 
-const { Header, Sider, Content } = Layout;
+const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 function mapDispatchToProps(dispatch) {
@@ -29,15 +28,16 @@ class Sidebar extends Component {
     const { sidebarVisibility } = this.state;
     return (
       <Sider
-        collapsible
+        collapsible={true}
+        defaultCollapsed={true}
         onCollapse={this.handleChange}
-        collapsed={sidebarVisibility}
+        collapsed={!sidebarVisibility}
       >
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
           <SubMenu key="sub1" title={<span>6CI Monoclonal Antibody</span>}>
-            <Menu.Item key="s1_1">Experiment 1</Menu.Item>
-            <Menu.Item key="s1_2">Experiment 2</Menu.Item>
-            <Menu.Item key="s1_3">Experiment 3</Menu.Item>
+            <Menu.Item key="s1_1">PIR-A and PIR-B</Menu.Item>
+            <Menu.Item key="s1_2">PIR-C and PIR-D</Menu.Item>
+            <Menu.Item key="s1_3">PIR-E and PIR-F</Menu.Item>
           </SubMenu>
           <SubMenu
             key="sub2"

@@ -1,13 +1,13 @@
 import React from "react";
 import { Layout, Menu, Icon, Button, Dropdown, Breadcrumb, Modal } from "antd";
-import { PageHeader, Descriptions } from "antd";
 import SidebarRender from "./Sidebar";
 import ProjectResultCard from './ProjectResultReport';
 import "antd/dist/antd.css";
+import ProjectResultCardHeader from "./ProjectResultCardHeader";
 
-const { Header, Sider, Content } = Layout;
+const { Header } = Layout;
 
-export default class Projects extends React.Component {
+export default class ProjectDashboard extends React.Component {
   state = {
     ModalText: "Content of the modal",
     visible: false,
@@ -41,7 +41,7 @@ export default class Projects extends React.Component {
   };
 
   render() {
-    const { visible, confirmLoading, ModalText } = this.state;
+    const { visible, confirmLoading } = this.state;
     return (
       <Layout
         style={{
@@ -93,24 +93,7 @@ export default class Projects extends React.Component {
             </Modal>
           </div>
           <Layout>
-            <Header
-              style={{
-                background: "#fff",
-                padding: 0,
-                display: "flex",
-                flexDirection: "row"
-              }}
-            >
-              <Breadcrumb
-                style={{
-                  padding: 18,
-                  flex: "auto"
-                }}
-              >
-                <Breadcrumb.Item>6CI Monoclonal Antibody</Breadcrumb.Item>
-                <Breadcrumb.Item>PIR-A and PIR-B</Breadcrumb.Item>
-              </Breadcrumb>
-            </Header>
+            <ProjectResultCardHeader />
             <ProjectResultCard />
           </Layout>
         </Layout>

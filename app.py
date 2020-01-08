@@ -21,9 +21,9 @@ ALLOWED_EXTENSIONS = set(['.zip'])
 
 app = Flask(__name__)
 api = Api(app)
-app.config['MONGO_DBNAME'] = 'reactloginreg'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/reactloginreg'
-app.config['JWT_SECRET_KEY'] = 'secret'
+app.config['MONGO_DBNAME'] = 'gviz'
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/gviz'
+app.config['JWT_SECRET_KEY'] = 'p92UY62Irdc9eFnfSmMiHE5oMPjWiznF'
 
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
@@ -83,9 +83,6 @@ class Login(Resource):
         
         return result 
         
-
-if __name__ == '__main__':
-    app.run(debug=True)
 @api.route('/upload')
 class Upload(Resource):
     def post(self):
@@ -106,6 +103,17 @@ class Upload(Resource):
         response = "Whatever you wish too return"
         
         return {"response": response, "file_url": session['uploadFilePath']}
+
+
+@api.route('/projects')
+class Projects(Resource):
+    def post(self):
+        projects = mongo.db.projects
+        project_found = projects.find_one({"userFirstName": "Aniket"})
+        print(project_found)
+
+        return project_found
+
 
 
 @api.route('/overlaps')
