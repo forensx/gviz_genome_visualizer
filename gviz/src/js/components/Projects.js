@@ -1,18 +1,6 @@
 import React from "react";
 import { Layout, Menu, Icon, Button, Dropdown, Breadcrumb, Modal } from "antd";
 import { PageHeader, Descriptions } from "antd";
-import {
-  Form,
-  Input,
-  Tooltip,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Checkbox,
-  AutoComplete
-} from "antd";
-import ExperimentCreatorModal from "./ExperimentCreatorModal";
 import "antd/dist/antd.css";
 
 const { Header, Sider, Content } = Layout;
