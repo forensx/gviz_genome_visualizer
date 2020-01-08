@@ -1,18 +1,24 @@
 // src/js/reducers/index.js
-import { ADD_ARTICLE } from "../constants/action-types";
+import { ADD_EXPERIMENT, TOGGLE_SIDEBAR } from "../constants/action-types";
 
 // the reducer pulls actions from action-types
 
 const initialState = {
-  articles: []
+  experiments: [],
+  sidebarVisibility: true
 };
 
 // the reducer sets an initial state
 
 function rootReducer(state = initialState, action) {
-  if (action.type === ADD_ARTICLE) {
+  if (action.type === ADD_EXPERIMENT) {
     return Object.assign({}, state, {
-      articles: state.articles.concat(action.payload)
+      articles: state.experiments.concat(action.payload)
+    });
+  }
+  else if (action.type === TOGGLE_SIDEBAR) {
+    return Object.assign({}, state, {
+      sidebarVisibility: !state.sidebarVisibility
     });
   }
   return state;
