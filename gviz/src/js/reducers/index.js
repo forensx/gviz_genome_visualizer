@@ -1,11 +1,12 @@
 // src/js/reducers/index.js
-import { ADD_EXPERIMENT, TOGGLE_SIDEBAR } from "../constants/action-types";
+import { ADD_EXPERIMENT, TOGGLE_SIDEBAR, TOGGLE_EXPERIMENTMODAL } from "../constants/action-types";
 
 // the reducer pulls actions from action-types
 
 const initialState = {
   experiments: [],
-  sidebarVisibility: true
+  sidebarVisibility: true,
+  experimentModalVisibility: false
 };
 
 // the reducer sets an initial state
@@ -19,6 +20,11 @@ function rootReducer(state = initialState, action) {
   else if (action.type === TOGGLE_SIDEBAR) {
     return Object.assign({}, state, {
       sidebarVisibility: !state.sidebarVisibility
+    });
+  }
+  else if (action.type === TOGGLE_EXPERIMENTMODAL) {
+    return Object.assign({}, state, {
+      experimentModalVisibility: !state.experimentModalVisibility
     });
   }
   return state;

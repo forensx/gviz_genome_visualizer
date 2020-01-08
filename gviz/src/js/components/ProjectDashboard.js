@@ -1,47 +1,38 @@
 import React from "react";
-import { Layout, Menu, Icon, Button, Dropdown, Breadcrumb, Modal } from "antd";
+import { connect } from "react-redux";
+import { Layout, Menu, Icon, Button, Dropdown } from "antd";
 import SidebarRender from "./Sidebar";
-import ProjectResultCard from './ProjectResultReport';
+import ProjectResultCard from "./ProjectResultReport";
 import "antd/dist/antd.css";
 import ProjectResultCardHeader from "./ProjectResultCardHeader";
+import ExperimentCreationModal from "./ExperimentCreationModal";
+import { toggleExperimentModal } from "../actions/index";
 
 const { Header } = Layout;
 
-export default class ProjectDashboard extends React.Component {
-  state = {
-    ModalText: "Content of the modal",
-    visible: false,
-    confirmLoading: false
+function mapDispatchToProps(dispatch) {
+  return {
+    toggleExperimentModal: experimentModalVisibility =>
+      dispatch(toggleExperimentModal())
   };
+}
 
-  showModal = () => {
-    this.setState({
-      visible: true
-    });
-  };
+class ProjectDashboardRender extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      experimentModalVisibility: false
+    };
 
-  handleOk = () => {
-    this.setState({
-      ModalText: "The modal will be closed after two seconds",
-      confirmLoading: true
-    });
-    setTimeout(() => {
-      this.setState({
-        visible: false,
-        confirmLoading: false
-      });
-    }, 2000);
-  };
+    this.handleExperimentModal = this.handleExperimentModal.bind(this);
+  }
 
-  handleCancel = () => {
-    console.log("Clicked cancel button");
-    this.setState({
-      visible: false
-    });
-  };
+  handleExperimentModal(event) {
+    this.setState({ experimentModalVisibility: true });
+    this.props.toggleExperimentModal();
+  }
 
   render() {
-    const { visible, confirmLoading } = this.state;
     return (
       <Layout
         style={{
@@ -61,7 +52,7 @@ export default class ProjectDashboard extends React.Component {
           <Dropdown
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={this.showModal}>
+                <Menu.Item key="1" onClick={this.handleExperimentModal}>
                   Experiment
                 </Menu.Item>
                 <Menu.Item key="2">Project</Menu.Item>
@@ -81,17 +72,7 @@ export default class ProjectDashboard extends React.Component {
           }}
         >
           <SidebarRender />
-          <div className="experimentCreateModal">
-            <Modal
-              title="Project Creation Wizard"
-              visible={visible}
-              onOk={this.handleOk}
-              confirmLoading={confirmLoading}
-              onCancel={this.handleCancel}
-            >
-              Project Creation modal. Enter project details here.
-            </Modal>
-          </div>
+          <ExperimentCreationModal />
           <Layout>
             <ProjectResultCardHeader />
             <ProjectResultCard />
@@ -101,3 +82,6 @@ export default class ProjectDashboard extends React.Component {
     );
   }
 }
+
+const ProjectDashboard = connect(null, mapDispatchToProps)(ProjectDashboardRender);
+export default ProjectDashboard;
