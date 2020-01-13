@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import Login from './Login';
-import Landing from './Landing';
-import Register from './Register';
-import ProjectDashboard from './ProjectDashboard';
+import Login from './Login_Register/Login';
+import Register from './Login_Register/Register';
+import ProjectDashboard from './ProjectsDashboard/ProjectDashboard';
 import '../../styles/App.css';
 
 import 'antd/dist/antd.css';
@@ -14,9 +13,8 @@ class App extends Component {
     return (
       <BrowserRouter basename="/">
         <div className="App">
-          <Route exact path="/" component={Landing} />
+          <Route exact path="/" component={Login} />
           <Route exact path= "/register" component={Register}/>
-          <Route exact path= "/login" component={Login}/>
           <Route exact path= "/projects" component={ProjectDashboard}/>
         </div>
       </BrowserRouter>

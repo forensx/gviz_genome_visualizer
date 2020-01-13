@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Modal } from "antd";
-import { toggleExperimentModal } from "../actions/index";
+import { toggleExperimentModal } from "../../actions/index";
 
 function mapDispatchToProps(dispatch) {
     return {

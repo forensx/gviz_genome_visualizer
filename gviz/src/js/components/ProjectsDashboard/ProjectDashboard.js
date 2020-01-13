@@ -6,7 +6,7 @@ import ProjectResultCard from "./ProjectResultReport";
 import "antd/dist/antd.css";
 import ProjectResultCardHeader from "./ProjectResultCardHeader";
 import ExperimentCreationModal from "./ExperimentCreationModal";
-import { toggleExperimentModal } from "../actions/index";
+import { toggleExperimentModal } from "../../actions/index";
 
 const { Header } = Layout;
 

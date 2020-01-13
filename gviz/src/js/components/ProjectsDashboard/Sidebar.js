@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Layout, Menu } from "antd";
-import { toggleSidebar } from "../actions/index";
+import { toggleSidebar } from "../../actions/index";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
