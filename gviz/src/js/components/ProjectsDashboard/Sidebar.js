@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Layout, Menu } from "antd";
 import { toggleSidebar } from "../../actions/index";
+import { getProjects } from "./DataFunctions";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -16,14 +17,37 @@ class Sidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sidebarVisibility: true
+      sidebarVisibility: true,
+      dataLoaded: false,
+      projects: []
     };
     this.handleChange = this.handleChange.bind(this);
   }
+
+  componentDidMount() {
+    this.getAllProjects()
+  }
+
+  getAllProjects = () => {
+    getProjects().then(data => {
+        this.setState(
+            {
+                dataLoaded: true,
+                projects: [...data]
+            },
+            () => {
+              console.log(this.state.dataLoaded)
+              console.log(this.state.projects)
+            }
+        )
+    })
+}
+
   handleChange(event) {
     this.setState({ sidebarVisibility: !this.state.sidebarVisibility });
     this.props.toggleSidebar();
   }
+
   render() {
     const { sidebarVisibility } = this.state;
     return (
@@ -34,19 +58,12 @@ class Sidebar extends Component {
         collapsed={!sidebarVisibility}
       >
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          <SubMenu key="sub1" title={<span>6CI Monoclonal Antibody</span>}>
-            <Menu.Item key="s1_1">PIR-A and PIR-B</Menu.Item>
-            <Menu.Item key="s1_2">PIR-C and PIR-D</Menu.Item>
-            <Menu.Item key="s1_3">PIR-E and PIR-F</Menu.Item>
-          </SubMenu>
-          <SubMenu
-            key="sub2"
-            title={<span>1-155-2 Mouse Monoclonal Antibody</span>}
-          >
-            <Menu.Item key="s2_1">Experiment 1</Menu.Item>
-            <Menu.Item key="s2_2">Experiment 2</Menu.Item>
-            <Menu.Item key="s2_3">Experiment 3</Menu.Item>
-          </SubMenu>
+          {
+            this.state.projects.map((item, index) => (
+              <SubMenu key = {index} title = {<span>{item[0]}</span>}>
+                
+              </SubMenu>
+            ))}
         </Menu>
       </Sider>
     );

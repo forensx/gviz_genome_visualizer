@@ -12,10 +12,6 @@ from datetime import datetime
 import logging
 import os
 
-logging.basicConfig(level=logging.INFO)
-
-logger = logging.getLogger('Flask File Uploader:')
-
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['.zip'])
 
@@ -84,45 +80,57 @@ class Login(Resource):
             result = jsonify({"result": "No results found"})
 
         return result
+    
+@app.route('/api/projects', methods=['GET'])
+def get_all_projects():
+    projects = mongo.db.projects
+
+    result = []
+
+    for field in projects.find():
+        result.append({'_id': str(field['_id']), 'title': field['title']})
+    return jsonify(result)
 
 
-@api.route('/upload')
-class Upload(Resource):
-    def post(self):
-        target = os.path.join(UPLOAD_FOLDER, 'test_docs')
+@app.route('/api/project', methods=['POST'])
+def add_task():
+    projects = mongo.db.projects
+    title = request.get_json()['title']
 
-        if not os.path.isdir(target):
-            os.mkdir(target)
+    project_id = projects.insert({'title': title})
+    new_project = projects.find_one({'_id': project_id})
 
-        logger.info("welcome to upload`")
+    result = {'title': new_project['title']}
 
-        file = request.files['file']
-        filename = secure_filename(file.filename)
-        # unicode formatted escape character
-        destination = "\\".join([target, filename])
-        file.save(destination)
-        session['uploadFilePath'] = destination
-
-        print(session['uploadFilePath'])
-        response = "Whatever you wish too return"
-
-        return {"response": response, "file_url": session['uploadFilePath']}
+    return jsonify({'result': result})
 
 
-@api.route('/api/projects')
-class Projects(Resource):
-    def get(self):
-        projects = mongo.db.projects
+@app.route('/api/project/<id>', methods=['PUT'])
+def update_task(id):
+    projects = mongo.db.projects
+    title = request.get_json()['title']
 
-        result = []
+    projects.find_one_and_update({'_id': ObjectId(id)}, {
+                                 "$set": {"title": title}}, upsert=False)
+    new_project = projects.find_one({'_id': ObjectId(id)})
 
-        for field in projects.find():
-            result.append({
-                "_id": str(field['_id']),
-                "title": field['title']
-            })
+    result = {'title': new_project['title']}
 
-        return jsonify(result)
+    return jsonify({"result": result})
+
+
+@app.route('/api/project/<id>', methods=['DELETE'])
+def delete_task(id):
+    projects = mongo.db.projects
+
+    response = projects.delete_one({'_id': ObjectId(id)})
+
+    if response.deleted_count == 1:
+        result = {'message': 'Project deleted successfully'}
+    else:
+        result = {'message': 'No project found'}
+
+    return jsonify({'result': result})
 
 if __name__ == '__main__':
     app.secret_key = os.urandom(24)
