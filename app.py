@@ -89,11 +89,12 @@ def get_all_projects():
 
     for field in projects.find():
         result.append({'_id': str(field['_id']), 'title': field['title']})
+    
     return jsonify(result)
 
 
 @app.route('/api/project', methods=['POST'])
-def add_task():
+def add_project():
     projects = mongo.db.projects
     title = request.get_json()['title']
 
@@ -106,7 +107,7 @@ def add_task():
 
 
 @app.route('/api/project/<id>', methods=['PUT'])
-def update_task(id):
+def update_project(id):
     projects = mongo.db.projects
     title = request.get_json()['title']
 
@@ -120,7 +121,7 @@ def update_task(id):
 
 
 @app.route('/api/project/<id>', methods=['DELETE'])
-def delete_task(id):
+def delete_project(id):
     projects = mongo.db.projects
 
     response = projects.delete_one({'_id': ObjectId(id)})
