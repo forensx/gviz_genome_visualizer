@@ -80,7 +80,8 @@ class Login(Resource):
             result = jsonify({"result": "No results found"})
 
         return result
-    
+
+
 @app.route('/api/projects', methods=['GET'])
 def get_all_projects():
     projects = mongo.db.projects
@@ -88,20 +89,36 @@ def get_all_projects():
     result = []
 
     for field in projects.find():
-        result.append({'_id': str(field['_id']), 'title': field['title']})
-    
+        result.append(
+            {'_id': str(field['_id']),
+             'projectTitle': field['projectTitle'],
+             "projectAnnotations": field['projectAnnotations'],
+             "experiments": field['experiments']
+             })
+
     return jsonify(result)
 
 
 @app.route('/api/project', methods=['POST'])
 def add_project():
     projects = mongo.db.projects
-    title = request.get_json()['title']
+    project_Title = request.get_json()['projectTitle']
+    project_Annotations = request.get_json()['projectAnnotations']
+    project_Owner = request.get_json()['projectOwner']
 
-    project_id = projects.insert({'title': title})
+    project_id = projects.insert_one({
+        'projectOwner': project_Owner,
+        'projectTitle': project_Title,
+        "projectAnnotations": project_Annotations,
+        "experiments": []
+    })
+
     new_project = projects.find_one({'_id': project_id})
 
-    result = {'title': new_project['title']}
+    result = {'projectTitle': new_project['projectTitle'],
+              'projectAnnotations': new_project['projectAnnotations'],
+              'experiments': new_project['experiments'],
+              }
 
     return jsonify({'result': result})
 
@@ -109,7 +126,7 @@ def add_project():
 @app.route('/api/project/<id>', methods=['PUT'])
 def update_project(id):
     projects = mongo.db.projects
-    title = request.get_json()['title']
+    title = request.get_json()['projectTitle']
 
     projects.find_one_and_update({'_id': ObjectId(id)}, {
                                  "$set": {"title": title}}, upsert=False)
@@ -133,6 +150,27 @@ def delete_project(id):
 
     return jsonify({'result': result})
 
+
+@app.route('/api/project/<id>/experiment', methods=['PUT'])
+def add_experiment(id):
+    projects = mongo.db.projects
+    experimentTitle = request.get_json()['experimentTitle']
+    experimentAnnotations = request.get_json()['experimentAnnotations']
+
+    projects.update_one({'_id': ObjectId(id)}, {
+        "$push": {
+            "experiments":
+            {
+                "experimentTitle": experimentTitle,
+                "experimentAnnotations": experimentAnnotations
+            }
+        }}, upsert=False)
+
+    result = {'experimentTitle': experimentTitle}
+
+    return jsonify({"result": result})
+
+
 if __name__ == '__main__':
     app.secret_key = os.urandom(24)
-    app.run(debug=True)    
+    app.run(debug=True)

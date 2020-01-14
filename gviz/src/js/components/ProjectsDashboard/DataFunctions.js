@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const getProjects = () => {
   return axios
@@ -9,7 +9,12 @@ export const getProjects = () => {
       var data = [];
       Object.keys(res.data).forEach(function(key) {
         var val = res.data[key];
-        data.push([val.title, val._id]);
+        data.push([
+          val.projectTitle,
+          val._id,
+          val.projectAnnotations,
+          val.experiments
+        ]);
       });
 
       return data;

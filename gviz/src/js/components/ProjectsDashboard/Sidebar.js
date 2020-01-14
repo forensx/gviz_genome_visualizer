@@ -25,23 +25,22 @@ class Sidebar extends Component {
   }
 
   componentDidMount() {
-    this.getAllProjects()
+    this.getAllProjects();
   }
 
   getAllProjects = () => {
     getProjects().then(data => {
-        this.setState(
-            {
-                dataLoaded: true,
-                projects: [...data]
-            },
-            () => {
-              console.log(this.state.dataLoaded)
-              console.log(this.state.projects)
-            }
-        )
-    })
-}
+      this.setState(
+        {
+          dataLoaded: true,
+          projects: [...data]
+        },
+        () => {
+          console.log(this.state.dataLoaded);
+        }
+      );
+    });
+  };
 
   handleChange(event) {
     this.setState({ sidebarVisibility: !this.state.sidebarVisibility });
@@ -58,12 +57,24 @@ class Sidebar extends Component {
         collapsed={!sidebarVisibility}
       >
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          {
-            this.state.projects.map((item, index) => (
-              <SubMenu key = {index} title = {<span>{item[0]}</span>}>
-                
-              </SubMenu>
-            ))}
+          {this.state.projects.map((project_item, project_index) => (
+            <SubMenu
+              key={"project_" + project_item[0]}
+              title={<span>{project_item[0]}</span>}
+            >
+              {project_item[3].map((experiment, experiment_index) => (
+                <Menu.Item
+                  key={
+                    project_item[0] +
+                    "_experiment_" +
+                    experiment["experimentTitle"]
+                  }
+                >
+                  {experiment["experimentTitle"]}
+                </Menu.Item>
+              ))}
+            </SubMenu>
+          ))}
         </Menu>
       </Sider>
     );
