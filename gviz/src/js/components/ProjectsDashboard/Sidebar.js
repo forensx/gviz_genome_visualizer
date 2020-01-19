@@ -1,63 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from "react";
 import { Layout, Menu } from "antd";
-import { toggleSidebar } from "../../actions/index";
-import { getProjects } from "./DataFunctions";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleSidebar: sidebarVisibility => dispatch(toggleSidebar())
-  };
-}
-
-class Sidebar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      sidebarVisibility: true,
-      dataLoaded: false,
-      projects: []
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  componentDidMount() {
-    this.getAllProjects();
-  }
-
-  getAllProjects = () => {
-    getProjects().then(data => {
-      this.setState(
-        {
-          dataLoaded: true,
-          projects: [...data]
-        },
-        () => {
-          console.log(this.state.dataLoaded);
-        }
-      );
-    });
-  };
-
-  handleChange(event) {
-    this.setState({ sidebarVisibility: !this.state.sidebarVisibility });
-    this.props.toggleSidebar();
-  }
-
-  render() {
-    const { sidebarVisibility } = this.state;
-    return (
-      <Sider
-        collapsible={true}
-        defaultCollapsed={true}
-        onCollapse={this.handleChange}
-        collapsed={!sidebarVisibility}
-      >
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          {this.state.projects.map((project_item, project_index) => (
+{
+  /* <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+          {projects.map((project_item, project_index) => (
             <SubMenu
               key={"project_" + project_item[0]}
               title={<span>{project_item[0]}</span>}
@@ -75,11 +24,23 @@ class Sidebar extends Component {
               ))}
             </SubMenu>
           ))}
-        </Menu>
-      </Sider>
-    );
-  }
+        </Menu> */
 }
 
-const SidebarRender = connect(null, mapDispatchToProps)(Sidebar);
-export default SidebarRender;
+function Sidebar() {
+  const [sidebarVisibility, setsidebarVisibility] = useState(true);
+  const [dataLoaded, setdataLoaded] = useState(false);
+
+  const handleChange = () => setsidebarVisibility(!sidebarVisibility);
+
+  return (
+    <Sider
+      collapsible={true}
+      defaultCollapsed={true}
+      onCollapse={handleChange}
+      collapsed={!sidebarVisibility}
+    ></Sider>
+  );
+}
+
+export default Sidebar;

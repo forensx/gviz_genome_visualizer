@@ -1,15 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Modal } from "antd";
-import { toggleExperimentModal } from "../../actions/index";
+//import { toggleExperimentModal } from "../../actions/index";
 
-function mapDispatchToProps(dispatch) {
-    return {
-        toggleExperimentModal: experimentModalVisibility => dispatch(toggleExperimentModal())
-    };
-  }
 
-class ExperimentCreationModalForm extends Component {
+class ExperimentCreationModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,5 +46,4 @@ class ExperimentCreationModalForm extends Component {
   }
 }
 
-const ExperimentCreationModal = connect(null, mapDispatchToProps)(ExperimentCreationModalForm);
 export default ExperimentCreationModal;

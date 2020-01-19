@@ -1,39 +1,28 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch, useStore } from "react-redux";
 import { Layout, Menu, Icon, Button, Dropdown } from "antd";
 import SidebarRender from "./Sidebar";
 import ProjectResultCard from "./ProjectResultReport";
 import "antd/dist/antd.css";
 import ProjectResultCardHeader from "./ProjectResultCardHeader";
-import ExperimentCreationModal from "./ExperimentCreationModal";
-import { toggleExperimentModal } from "../../actions/index";
+import { getProjects } from "./DataFunctions";
+import { getProjectsRedux } from "../../actions/index";
 
 const { Header } = Layout;
 
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleExperimentModal: experimentModalVisibility =>
-      dispatch(toggleExperimentModal())
-  };
-}
+function ProjectDashboard() {
+  // const projects = useSelector(state => state.projects);
+  const dispatch = useDispatch();
+  const [projects, setProjects] = useState([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-class ProjectDashboardRender extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      experimentModalVisibility: false
-    };
+  useEffect(() => {
+    setDataLoaded(true);
+    console.log(dataLoaded);
+  }, []);
 
-    this.handleExperimentModal = this.handleExperimentModal.bind(this);
-  }
-
-  handleExperimentModal(event) {
-    this.setState({ experimentModalVisibility: true });
-    this.props.toggleExperimentModal();
-  }
-
-  render() {
-    return (
+  return (
+    <div>
       <Layout
         style={{
           display: "flex",
@@ -52,9 +41,7 @@ class ProjectDashboardRender extends React.Component {
           <Dropdown
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={this.handleExperimentModal}>
-                  Experiment
-                </Menu.Item>
+                <Menu.Item key="1">Experiment</Menu.Item>
                 <Menu.Item key="2">Project</Menu.Item>
               </Menu>
             }
@@ -72,16 +59,16 @@ class ProjectDashboardRender extends React.Component {
           }}
         >
           <SidebarRender />
-          <ExperimentCreationModal />
+
           <Layout>
             <ProjectResultCardHeader />
             <ProjectResultCard />
           </Layout>
         </Layout>
       </Layout>
-    );
-  }
+    </div>
+  );
 }
 
-const ProjectDashboard = connect(null, mapDispatchToProps)(ProjectDashboardRender);
+// <ExperimentCreationModal />
 export default ProjectDashboard;
