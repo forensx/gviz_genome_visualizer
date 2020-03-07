@@ -32,21 +32,19 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 class Register(Resource):
     def post(self):
         users = mongo.db.users
-        first_name = request.get_json()['first_name']
-        last_name = request.get_json()['last_name']
-        email = request.get_json()['email']
-        #admin = request.get_json()['admin']
+        first_name = str(request.get_json()['first_name'])
+        last_name = str(request.get_json()['last_name'])
+        email = str(request.get_json()['email'])
         password = bcrypt.generate_password_hash(
-            request.get_json()['password']).decode('utf-8')
+            str(request.get_json()['password'])).decode('utf-8')
         created = datetime.utcnow()
 
-        user_id = users.insert_one({
-            'first_name': first_name,
-            'last_name': last_name,
-            'email': email,
-            'password': password,
-            # 'admin': admin,
-            'created': created
+        user_id = users.insert({
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "password": password,
+            "created": created
         })
 
         new_user = users.find_one({'_id': user_id})
@@ -86,8 +84,6 @@ class Login(Resource):
 def get_all_projects():
     projects = mongo.db.projects
 
-    result = []
-
     for field in projects.find():
         result.append(
             {'_id': str(field['_id']),
@@ -99,8 +95,15 @@ def get_all_projects():
     return jsonify(result)
 
 
-@app.route('/api/project', methods=['POST'])
-def add_project():
+@app.route('/api/<user_id>/project', methods=['POST'])
+def add_project(user_id):
+
+    # GET USERS COLLECTION TO QUERY FROM
+    users = mongo.db.users
+    # FIND PROJECTS ONLY FOR USER, IF EXIST
+    
+
+
     projects = mongo.db.projects
     project_Title = request.get_json()['projectTitle']
     project_Annotations = request.get_json()['projectAnnotations']
@@ -129,7 +132,8 @@ def update_project(id):
     title = request.get_json()['projectTitle']
 
     projects.find_one_and_update({'_id': ObjectId(id)}, {
-                                 "$set": {"title": title}}, upsert=False)
+                                 "$set": {"title": title}},
+                                 upsert=False)
     new_project = projects.find_one({'_id': ObjectId(id)})
 
     result = {'title': new_project['title']}
